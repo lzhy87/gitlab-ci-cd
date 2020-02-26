@@ -1,0 +1,16 @@
+wget -O /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-386 \
+&& chmod +x /usr/local/bin/gitlab-runner 
+#&&  curl -sSL https://get.docker.com/ | sh \
+useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash 
+ usermod -aG docker gitlab-runner 
+ gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner 
+gitlab-runner start
+##加速##
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+  "registry-mirrors": ["https://iuj3d0uh.mirror.aliyuncs.com"]
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
